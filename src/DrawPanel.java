@@ -8,14 +8,15 @@ import java.util.ArrayList;
 import java.awt.Font;
 
 class DrawPanel extends JPanel implements MouseListener {
-
-    private ArrayList<Card> hand;
-    private Rectangle button;
+    private Hand hand;
+    private Rectangle newGameButton;
+    private Rectangle replaceButton;
 
     public DrawPanel() {
-        button = new Rectangle(157, 300, 160, 26);
+        newGameButton = new Rectangle(157, 300, 160, 26);
+        replaceButton = new Rectangle(157, 340, 160, 26);
         this.addMouseListener(this);
-        hand = Card.buildHand();
+        hand = new Hand();
     }
 
     protected void paintComponent(Graphics g) {
@@ -24,8 +25,8 @@ class DrawPanel extends JPanel implements MouseListener {
         int y = 20;
         int cardPerRowCount = 0;
         int rowCount = 1;
-        for (int i = 0; i < hand.size(); i++) {
-            Card c = hand.get(i);
+        for (int i = 0; i < hand.getHand().size(); i++) {
+            Card c = hand.getHand().get(i);
             if (cardPerRowCount == 3) {
                 x = 130;
                 y = 20 + c.getImage().getHeight() * rowCount + 10 * rowCount;
@@ -43,7 +44,9 @@ class DrawPanel extends JPanel implements MouseListener {
         }
         g.setFont(new Font("Courier New", Font.BOLD, 20));
         g.drawString("GET NEW CARDS", 160, 320);
-        g.drawRect((int)button.getX(), (int)button.getY(), (int)button.getWidth(), (int)button.getHeight());
+        g.drawString("REPLACE CARDS", 160, 360);
+        g.drawRect((int)newGameButton.getX(), (int)newGameButton.getY(), (int)newGameButton.getWidth(), (int)newGameButton.getHeight());
+        g.drawRect((int)replaceButton.getX(), (int)replaceButton.getY(), (int)replaceButton.getWidth(), (int)replaceButton.getHeight());
     }
 
     public void mousePressed(MouseEvent e) {
@@ -51,28 +54,27 @@ class DrawPanel extends JPanel implements MouseListener {
         Point clicked = e.getPoint();
 
         if (e.getButton() == 1) {
-            if (button.contains(clicked)) {
-                hand = Card.buildHand();
+            if (newGameButton.contains(clicked)) {
+                hand = new Hand();
             }
 
-            for (int i = 0; i < hand.size(); i++) {
-                Rectangle box = hand.get(i).getCardBox();
+            if (replaceButton.contains(clicked)) {
+                ArrayList<Integer> cardsToReplace = new ArrayList<Integer>();
+                for (int i = 0; i < hand.getHand().size(); i++) {
+                    if (hand.getHand().get(i).getHighlight()) {
+                        cardsToReplace.add(i);
+                    }
+                }
+                hand.replaceSingleCard(cardsToReplace);
+            }
+
+            for (int i = 0; i < hand.getHand().size(); i++) {
+                Rectangle box = hand.getHand().get(i).getCardBox();
                 if (box.contains(clicked)) {
-                    hand.get(i).flipCard();
+                    hand.getHand().get(i).flipHighlight();
                 }
             }
         }
-
-        if (e.getButton() == 3) {
-            for (int i = 0; i < hand.size(); i++) {
-                Rectangle box = hand.get(i).getCardBox();
-                if (box.contains(clicked)) {
-                    hand.get(i).flipHighlight();
-                }
-            }
-        }
-
-
     }
 
     public void mouseReleased(MouseEvent e) { }
