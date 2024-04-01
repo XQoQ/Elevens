@@ -47,6 +47,7 @@ class DrawPanel extends JPanel implements MouseListener {
         g.drawString("REPLACE CARDS", 160, 360);
         g.drawRect((int)newGameButton.getX(), (int)newGameButton.getY(), (int)newGameButton.getWidth(), (int)newGameButton.getHeight());
         g.drawRect((int)replaceButton.getX(), (int)replaceButton.getY(), (int)replaceButton.getWidth(), (int)replaceButton.getHeight());
+
     }
 
     public void mousePressed(MouseEvent e) {
@@ -73,6 +74,10 @@ class DrawPanel extends JPanel implements MouseListener {
                 if (box.contains(clicked)) {
                     hand.getHand().get(i).flipHighlight();
                 }
+            }
+
+            if (!hand.checkIfGameOver()) {
+                System.out.println("Game over");
             }
         }
     }
