@@ -38,7 +38,7 @@ public class Hand extends Deck{
     }
 
     public void shuffle(ArrayList<Integer> cardToReplace) {
-        for (int i = 0; i < hand.size(); i++) {
+        for (int i = 0; i < cardToReplace.size() + 1; i++) {
             int r = (int)(Math.random() * getDeck().size());
             removeCard(hand.set(cardToReplace.get(0), getDeck().remove(r)));
             cardToReplace.remove(0);

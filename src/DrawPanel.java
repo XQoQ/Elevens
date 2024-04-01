@@ -45,9 +45,17 @@ class DrawPanel extends JPanel implements MouseListener {
         g.setFont(new Font("Courier New", Font.BOLD, 20));
         g.drawString("GET NEW CARDS", 160, 320);
         g.drawString("REPLACE CARDS", 160, 360);
+        g.drawString("CARD LEFT: " + hand.getDeck().size(), 10, 450);
         g.drawRect((int)newGameButton.getX(), (int)newGameButton.getY(), (int)newGameButton.getWidth(), (int)newGameButton.getHeight());
         g.drawRect((int)replaceButton.getX(), (int)replaceButton.getY(), (int)replaceButton.getWidth(), (int)replaceButton.getHeight());
 
+        if (!hand.checkIfGameOver()) {
+            g.drawString("GAME OVER", 180, 400);
+        }
+
+        if (hand.getDeck().isEmpty()) {
+            g.drawString("YOU WIN", 190, 270);
+        }
     }
 
     public void mousePressed(MouseEvent e) {
@@ -76,9 +84,7 @@ class DrawPanel extends JPanel implements MouseListener {
                 }
             }
 
-            if (!hand.checkIfGameOver()) {
-                System.out.println("Game over");
-            }
+
         }
     }
 
